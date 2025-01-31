@@ -1,0 +1,52 @@
+<div class="px-6 accounts mt-6">
+  <div
+    class="column account"
+    *ngFor="let account of $accounts | async"
+    (click)="handleAccountclick(account.accountNumber)"
+  >
+    <span class="block center">
+      Balance
+      <span class="center block account-balance font-roboto">{{
+        account.accountBalance | currency : "$"
+      }}</span>
+    </span>
+    <span class="block center"
+      >Account Type<span class="account-type block">{{
+        account.accountType | uppercase
+      }}</span></span
+    >
+
+    <div class="details">
+      <span class="account-number block center"
+        >Account Number <br /><b>{{ account.accountNumber }}</b></span
+      >
+      <span class="account-number block center"
+        >Account Opened <br /><b>{{ "2024-01-17" | date }}</b></span
+      >
+    </div>
+  </div>
+</div>
+
+<div class="transactions px-6 mt-6 font-roboto">
+  <span class="transaction-description px-2">
+    Transactions: [{{ $activeAccount | async }}]
+  </span>
+  <div class="heading px-2">
+    <span class="from">FROM</span>
+    <span class="amount">AMOUNT</span>
+    <span class="transacted-at">TRANSACTED TYPE</span>
+    <span class="status">TRANSACTION STATUS</span>
+    <span class="to">TRANSACTED AT</span>
+  </div>
+  <div class="px-2">
+    <div class="body" *ngFor="let transaction of $transactions | async">
+      <span class="from">{{ transaction.initiatorAccount }}</span>
+      <span class="amount">{{ transaction.amount | currency : "$" }}</span>
+      <span class="transaction-type">{{ transaction.transactionType }}</span>
+      <span class="status">{{ transaction.transactionStatus }}</span>
+      <span class="transacted-at">{{
+        transaction.completedAt | date : "longDate"
+      }}</span>
+    </div>
+  </div>
+</div>

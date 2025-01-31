@@ -1,0 +1,46 @@
+.large-heading {
+  font-size: 4.2em;
+  line-height: 1.1em;
+}
+
+.small-heading {
+  font-size: 1.8em;
+}
+
+.micro-heading {
+  font-size: 1em;
+}
+
+.medium-heading {
+  font-size: 2.8em;
+}
+
+.message-header p {
+  text-align: center !important;
+  width: 100%;
+  font-size: 1.2em;
+}
+
+.message-body {
+  height: 180px !important;
+}
+
+.menu-list a {
+  font-size: 0.8em;
+  &:hover {
+    color: hsl(348, 100%, 61%);
+  }
+}
+
+.extra-margin {
+  margin-top: 1em;
+}
+
+.bank-background-image {
+  // background-image: url("/bank-image.jpg");
+  background-image: url("/bank-image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  // filter: blur(1px);
+}

@@ -1,0 +1,65 @@
+.accounts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2em;
+}
+
+.account {
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  &:hover {
+    background-color: #fcf3f3;
+    cursor: pointer;
+  }
+}
+
+.block {
+  display: block;
+}
+
+.center {
+  text-align: center;
+}
+
+.checking,
+.account-type {
+  color: hsl(348, 100%, 61%);
+  font-weight: bold;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.account-balance {
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+  // padding-bottom: 2em;
+}
+
+.transaction-description {
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+  font-size: 1.2em;
+  width: 100%;
+  display: inline-block;
+}
+.heading {
+  margin: 0;
+  background-color: #000;
+  color: hsl(348, 100%, 61%);
+}
+.transactions .heading,
+.transactions .body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+//TODO add media
+@media screen and (max-width: 800px) {
+  .accounts {
+    grid-template-columns: 1fr;
+  }
+}

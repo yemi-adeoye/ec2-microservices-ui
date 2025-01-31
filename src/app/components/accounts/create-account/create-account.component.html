@@ -1,0 +1,125 @@
+<div class="is-danger">
+  {{ $accountError | async }}
+</div>
+
+@if($accountCreated| async){
+<div class="has-background-success mx-6 mt-4 p-4">
+  Account has been created successfully.
+  <a routerLink="/accounts/list" href="#" class="button has-background-danger"
+    >View Accounts</a
+  >
+  <button
+    class="button has-background-black has-text-white"
+    (click)="showForm()"
+  >
+    Create Another Account
+  </button>
+</div>
+} @if(!($accountError | async) && !($accountCreated | async)){
+<form action="" [formGroup]="createAccountForm">
+  <h1 class="mt-4 column is-12 has-text-centered font-roboto">
+    Create Account
+  </h1>
+  <div class="columns px-6">
+    <div class="column">
+      <div class="field">
+        <label class="label">First Name</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Text input"
+            formControlName="firstName"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Last Name</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Text input"
+            formControlName="lastName"
+          />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Date of Birth</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            placeholder="Text input"
+            formControlName="dob"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="text"
+            placeholder="Text input"
+            formControlName="username"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="email"
+            placeholder="Email input"
+            formControlName="email"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-exclamation-triangle"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Account Type</label>
+        <div class="control">
+          <div class="select">
+            <select formControlName="accountType">
+              <option value="checking">Checking</option>
+              <option value="savings" selected>Savings</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="columns is-mobile px-6 is-centered">
+    <div class="column is-half">
+      <button class="button has-background-danger" (click)="createAccount()">
+        Create Account
+      </button>
+    </div>
+  </div>
+  <div class="columns is-mobile px-6 is-centered mt-0">
+    <div class="field column is-half mt-0">
+      <p class="has-text-centered help">
+        By clicking the create account button you agree to the terms and
+        conditions.
+      </p>
+    </div>
+  </div>
+</form>
+}
