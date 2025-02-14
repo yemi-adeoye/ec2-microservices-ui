@@ -31,4 +31,8 @@ export class CacheService implements ICacheService {
 
     return obj;
   }
+
+  clear() {
+    localStorage.clear()
+  }
 }

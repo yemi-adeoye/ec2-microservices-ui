@@ -67,6 +67,10 @@ export class ListAccountComponent {
     })).subscribe()
   }
 
+  ngAfterViewInit(): void {
+    window.history.pushState({}, '', '/accounts')
+  }
+
   ngOnDestroy(): void {
     // unsubscribe from observables
 

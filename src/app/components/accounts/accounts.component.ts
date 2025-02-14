@@ -8,7 +8,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './accounts.component.scss'
 })
 export class AccountsComponent {
-  ngAfterViewInit(): void {
-    window.history.pushState({}, '', '/accounts')
-  }
+
 }

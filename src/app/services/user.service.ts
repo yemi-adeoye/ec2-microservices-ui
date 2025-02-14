@@ -18,4 +18,10 @@ export class UserService implements IUserService {
   getUser(username: string): Observable<any> {
     return this.http.get<any>(`http://localhost:7000/users/${username}`)
   }
+
+  getUserId(token: string): string | null {
+    const decoded: any = jwtDecode(token);
+
+    return decoded.userId || null;
+  }
 }

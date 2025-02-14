@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, },
   { path: 'unauthorized', component: UnauthorizedComponent },
   {
-    path: 'accounts', component: AccountsComponent, canActivate: [], children: [
+    path: 'accounts', component: ListAccountComponent, canActivate: [authGuard], children: [
       { path: 'new', component: CreateAccountComponent },
       { path: 'list', component: ListAccountComponent },
     ]

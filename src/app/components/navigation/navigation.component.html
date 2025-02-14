@@ -44,6 +44,25 @@
       </a>
 
       <a class="navbar-item navbar-item has-text-danger font-roboto"> Help </a>
+      <div
+        class="navbar-item has-dropdown has-text-danger is-hoverable font-roboto"
+      >
+        <a routerLink="/accounts" class="navbar-link"
+          ><span class="icon is-small"> <i class="fas fa-bell"></i> </span
+        ></a>
+        <div class="navbar-dropdown navbar-dropdown-custom is-right">
+          <p
+            [ngClass]="{ 'is-read': notification.read }"
+            class="inner-item"
+            *ngFor="let notification of $notifications | async"
+            (click)="handleNotificationRead(notification.id)"
+          >
+            <span (click)="handleNotificationRead(notification.id)">{{
+              notification.parsedMessage
+            }}</span>
+          </p>
+        </div>
+      </div>
       <div class="navbar-item">
         <div class="buttons">
           <a
