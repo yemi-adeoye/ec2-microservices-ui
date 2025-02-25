@@ -6,9 +6,6 @@
   font-variation-settings: "wdth" 100;
 }
 
-// <uniquifier>: Use a unique and descriptive class name
-// <weight>: Use a value from 200 to 700
-
 .font-oswald {
   font-family: "Oswald", serif;
   font-optical-sizing: auto;
@@ -18,4 +15,19 @@
 
 .half-width {
   width: 75%;
+}
+
+html,
+body {
+  min-height: 90vh;
+}
+
+.foot {
+  display: block;
+  position: relative;
+  width: 100%;
+  bottom: 0;
+  padding: 0;
+  margin: 0;
+  margin-top: 50px;
 }

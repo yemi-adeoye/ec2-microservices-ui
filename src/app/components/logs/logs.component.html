@@ -1,0 +1,45 @@
+@if ((isLogLoadError$ | async) && !(isLoadingLogs$ | async)) {
+<div
+  class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block fetching has-text-danger"
+>
+  Error fetching logs please try again later
+</div>
+} @if (isLoadingLogs$ | async) {
+<div class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block fetching">
+  Fetching Logs....
+</div>
+}@else if (!(isLogLoadError$ | async)){
+<h1 class="mt-4 column is-12 has-text-centered font-roboto">
+  Recent Activity Logs
+</h1>
+<div class="logs px-6 mt-2">
+  <div class="heading px-2 has-text-centered font-roboto">
+    <span class="from">SERVICE</span>
+    <span class="amount">PATH CALLED</span>
+    <span class="transacted-at">RESPONSE CODE</span>
+    <span class="status">ACTIVITY START</span>
+    <span class="to">ACTIVITY END</span>
+  </div>
+
+  <div class="px-0">
+    <div
+      class="body has-text-centered"
+      *ngFor="let log of $logs | async | slice : 0 : currentPage"
+    >
+      <span class="has-text-left">{{ log.service }}</span>
+      <span class="has-text-left">{{ log.path }}</span>
+      <span [class.has-text-red]="log.responseCode > '300'">{{
+        log.responseCode
+      }}</span>
+      <span>{{ log.callTime }}</span>
+      <span>{{ log.responseTime }}</span>
+    </div>
+    @if(($logs | async)?.length == 0 && !(isLoadingLogs$ | async)){
+    <div class="has-text-centered mt-4">
+      There are no logs to show this time.
+    </div>
+
+    }
+  </div>
+</div>
+}

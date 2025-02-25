@@ -3,7 +3,7 @@ import { AuthDetails } from "../models/AuthDetails";
 
 export interface IAuthService {
 
-  refreshLogin(): AuthDetails
+  refreshLogin(): void
 
   logout(): void
 }

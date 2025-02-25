@@ -4,6 +4,11 @@ import { BehaviorSubject, map } from 'rxjs';
 import { io, Socket } from 'socket.io-client'
 import { CacheService } from './cache.service';
 import { UserService } from './user.service';
+import { AccountService } from './account.service';
+import { TransactionService } from './transaction.service';
+import { Router } from '@angular/router';
+import { environment } from '../../environment/environment';
+import { ACCESS_TOKEN } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -14,29 +19,28 @@ export class NotificationService {
 
   socket: any;
 
-  constructor(private httpClient: HttpClient, private cacheService: CacheService, private userService: UserService) {
-
+  constructor(private httpClient: HttpClient, private accountService: AccountService,
+    private router: Router,
+    private cacheService: CacheService, private userService: UserService, private transactionService: TransactionService) {
   }
 
   getNotifications() {
-    const token: string = this.cacheService.getItem('ACCESS_TOKEN');
+    const token: string = this.cacheService.getItem(ACCESS_TOKEN);
 
     if (token) {
       const userId = this.userService.getUserId(token);
-      this.httpClient.get(`http://localhost:7000/notifications/${userId}`).pipe(map((notifications: any) => {
-        console.log('notifications: ', notifications)
+      this.httpClient.get(`${environment.apiGatewayUrl}/notifications/${userId}`).pipe(map((notifications: any) => {
         this.$notifications.next(notifications)
       })).subscribe({
         error: (err) => {
           // TODO show user try again to fetch notifications?
-          console.log(err)
         }
       })
     }
   }
 
   createConnection = () => {
-    this.socket = io("http://localhost:7000") // TODO import from environment file
+    this.socket = io(`${environment.apiGatewayUrl}`) // TODO import from environment file
     return this.socket;
   }
 
@@ -51,23 +55,40 @@ export class NotificationService {
   }
 
   handleNotifications = (notification: string) => {
-    console.log({ notification })
+    let notificationJson;
+    try {
+      notificationJson = JSON.parse(notification)
+      this.$notifications.next([...this.$notifications.value, notificationJson])
+
+    } catch (error) {
+      throw new Error(`Error parsing JSON notification: , ${error}`)
+    }
+
   }
 
   handleNotificationsRead = (notificationId: string) => {
-    this.httpClient.post(`http://localhost:7000/notifications/${notificationId}`, {}).pipe(map((notificationReadResponse: any) => {
+    this.httpClient.post(`${environment.apiGatewayUrl}/notifications/${notificationId}`, {}).pipe(map((notificationReadResponse: any) => {
 
-      this.$notifications.pipe(map((notifications: any) => {
-        notifications.forEach((notification: any) => {
-          if (notification.id == notificationReadResponse.id) {
-            notification.read = true;
-          }
-        })
-        this.$notifications.next([...notifications])
-      })).subscribe()
+      const previousNotifications = this.$notifications.value;
+
+      let updatedNotification: any;
+
+      previousNotifications.forEach((notification: any) => {
+        if (notification.id == notificationReadResponse.id) {
+          notification.read = true;
+          updatedNotification = notification
+        }
+      })
+      this.$notifications.next([...previousNotifications])
+
+      const notificationJSON = JSON.parse(updatedNotification.message)
+      const accountNumberStartIndex = notificationJSON.notification.search(/ \d+/) + 1
+      const accountNumber = notificationJSON.notification.slice(accountNumberStartIndex, accountNumberStartIndex + 10)
+      this.router.navigate(['accounts'], { queryParams: { account: accountNumber } })
 
     })).subscribe({
       error: (error) => {
+        // TODO handle error
         console.error(error)
       }
     })

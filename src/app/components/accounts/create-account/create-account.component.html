@@ -3,20 +3,22 @@
 </div>
 
 @if($accountCreated| async){
-<div class="has-background-success mx-6 mt-4 p-4">
-  Account has been created successfully.
-  <a routerLink="/accounts/list" href="#" class="button has-background-danger"
-    >View Accounts</a
-  >
-  <button
-    class="button has-background-black has-text-white"
-    (click)="showForm()"
-  >
-    Create Another Account
-  </button>
+<div class="has-background-success-lighter mx-6 mt-4 p-4 success">
+  <p class="has-text-centered mb-4">Account has been created successfully.</p>
+  <div class="has-text-centered">
+    <a routerLink="/accounts/" href="#" class="button has-background-danger"
+      >View Accounts</a
+    >
+    <button
+      class="button has-background-black has-text-white ml-4"
+      (click)="showForm()"
+    >
+      Create Another Account
+    </button>
+  </div>
 </div>
 } @if(!($accountError | async) && !($accountCreated | async)){
-<form action="" [formGroup]="createAccountForm">
+<form action="" [formGroup]="createAccountForm" class="is-fullheight">
   <h1 class="mt-4 column is-12 has-text-centered font-roboto">
     Create Account
   </h1>
@@ -30,6 +32,7 @@
             type="text"
             placeholder="Text input"
             formControlName="firstName"
+            [readonly]="true"
           />
         </div>
       </div>
@@ -42,6 +45,7 @@
             type="text"
             placeholder="Text input"
             formControlName="lastName"
+            [readonly]="true"
           />
         </div>
       </div>
@@ -54,6 +58,7 @@
             type="text"
             placeholder="Text input"
             formControlName="dob"
+            [readonly]="true"
           />
         </div>
       </div>
@@ -67,6 +72,7 @@
             type="text"
             placeholder="Text input"
             formControlName="username"
+            [readonly]="true"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-user"></i>
@@ -76,18 +82,16 @@
 
       <div class="field">
         <label class="label">Email</label>
-        <div class="control has-icons-left has-icons-right">
+        <div class="control has-icons-left">
           <input
             class="input"
             type="email"
             placeholder="Email input"
             formControlName="email"
+            [readonly]="true"
           />
           <span class="icon is-small is-left">
             <i class="fas fa-envelope"></i>
-          </span>
-          <span class="icon is-small is-right">
-            <i class="fas fa-exclamation-triangle"></i>
           </span>
         </div>
       </div>
@@ -108,7 +112,11 @@
 
   <div class="columns is-mobile px-6 is-centered">
     <div class="column is-half">
-      <button class="button has-background-danger" (click)="createAccount()">
+      <button
+        class="button has-background-danger"
+        (click)="createAccount()"
+        style="width: 100%"
+      >
         Create Account
       </button>
     </div>

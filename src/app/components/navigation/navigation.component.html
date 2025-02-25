@@ -1,5 +1,5 @@
 <nav
-  class="navbar has-background-black-bis"
+  class="navbar has-background-black-bis is-fixed-top"
   role="navigation"
   aria-label="main navigation"
 >
@@ -26,29 +26,42 @@
     <div class="navbar-start">
       <div
         class="navbar-item has-dropdown has-text-danger is-hoverable font-roboto"
+        *ngIf="$isLoggedIn | async"
       >
         <a routerLink="/accounts" class="navbar-link">Accounts</a>
         <div class="navbar-dropdown">
           <a routerLink="/accounts/new" class="navbar-item">Create Account</a>
-          <a routerLink="/accounts/list" class="navbar-item">View Account</a>
+          <a routerLink="/accounts/" class="navbar-item">View Account</a>
+          <a routerLink="/accounts/transfers" class="navbar-item">Transfers</a>
         </div>
       </div>
       <a class="navbar-item has-text-danger font-roboto"> Wealth Management </a>
       <a class="navbar-item has-text-danger font-roboto"> Cards </a>
-      <a class="navbar-item has-text-danger font-roboto"> Loans </a>
     </div>
 
     <div class="navbar-end pr-6">
-      <a class="navbar-item navbar-item has-text-danger font-roboto">
-        Career
+      <a
+        class="navbar-item navbar-item has-text-danger font-roboto"
+        *ngIf="$isLoggedIn | async"
+        routerLink="/logs"
+      >
+        Activity Logs
       </a>
 
       <a class="navbar-item navbar-item has-text-danger font-roboto"> Help </a>
       <div
-        class="navbar-item has-dropdown has-text-danger is-hoverable font-roboto"
+        class="navbar-item has-dropdown is-hoverable font-roboto"
+        *ngIf="$isLoggedIn | async"
       >
         <a routerLink="/accounts" class="navbar-link"
-          ><span class="icon is-small"> <i class="fas fa-bell"></i> </span
+          ><span class="icon is-small">
+            <i
+              class="fas fa-bell"
+              [ngClass]="{
+                'is-alert':
+                  $notifications | async | objectCount : 'read' : false
+              }"
+            ></i> </span
         ></a>
         <div class="navbar-dropdown navbar-dropdown-custom is-right">
           <p

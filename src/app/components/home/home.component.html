@@ -9,7 +9,11 @@
       Don't hide your money in the woods! It's safer with us, plus you can watch
       your money grow up to 5% P.a.
     </p>
-    <a class="button is-danger font-roboto mb-2"> Create a free account now</a>
+    @if(!($isLoggedIn | async)){
+    <a class="button is-danger font-roboto mb-2" routerLink="/register">
+      Sign up now then create a free account</a
+    >
+    }
   </div>
 </div>
 
@@ -58,53 +62,5 @@
         <a href="">docs</a>.
       </div>
     </article>
-  </div>
-</div>
-
-<div class="columns px-6 mt-6 has-background-black">
-  <div class="column">
-    <p class="menu-label micro-heading font-oswald mb-2">Company</p>
-    <ul class="menu-list">
-      <li><a>About Bank Trapeza</a></li>
-      <li><a>Annual Reports and Financial Docs</a></li>
-      <li><a>Careers</a></li>
-      <li><a>Corporate Governance Statements</a></li>
-      <li><a>Ethics Statement</a></li>
-      <li><a>Gender Equality</a></li>
-      <li><a>News Room</a></li>
-      <li><a>Internal Audit</a></li>
-    </ul>
-  </div>
-  <div class="column">
-    <p class="menu-label micro-heading font-oswald mb-2">Legal</p>
-    <ul class="menu-list">
-      <li><a>Bank Trapeza Legal Documents</a></li>
-      <li><a>Privacy Notice</a></li>
-      <li><a>Manage cookies</a></li>
-      <li><a>Energy Savings Plan</a></li>
-    </ul>
-  </div>
-  <div class="column">
-    <p class="menu-label micro-heading font-oswald mb-2">Customer Center</p>
-    <ul class="menu-list">
-      <li><a>Scam Notice</a></li>
-      <li><a>Overdraft Charges</a></li>
-      <li><a>Help Center</a></li>
-      <li><a>Report an Issue</a></li>
-      <li><a>Contact Us</a></li>
-      <li><a>Mobile Banking Quick Guide</a></li>
-      <li><a>Security and Fraud</a></li>
-      <li><a>Social Media Guidelines</a></li>
-    </ul>
-  </div>
-  <div class="column">
-    <p class="menu-label micro-heading font-oswald mb-2">Partner with Us</p>
-    <ul class="menu-list">
-      <li><a>Developers</a></li>
-      <li><a>B2B Seervices</a></li>
-      <li><a>API Services</a></li>
-      <li><a>Strategic Partnerships</a></li>
-      <li><a>Projects</a></li>
-    </ul>
   </div>
 </div>

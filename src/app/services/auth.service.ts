@@ -8,6 +8,8 @@ import { CacheService } from './cache.service';
 import { NotificationService } from './notification.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service'
+import { environment } from '../../environment/environment';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,12 @@ export class AuthService implements IAuthService {
     private notificationService: NotificationService,
     private cookieService: CookieService
   ) {
-    document.cookie = "YEMI=badooooo"
+  }
+
+  initiateLogin() {
+    const { authEndpoint, clientId, redirectUri, responseType, scope } = environment.authServer
+
+    window.location.replace(`${authEndpoint}?redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&client_id=${clientId}`)
   }
 
   loginWithCode(code: string): Observable<boolean> {
@@ -31,9 +38,8 @@ export class AuthService implements IAuthService {
     let requestBody = { code }
 
     return this.http
-      .post<AuthDetails>('http://localhost:7000/oauth2/token', requestBody)
+      .post<AuthDetails>(`${environment.apiGatewayUrl}/oauth2/token`, requestBody)
       .pipe(map(authDetails => {
-        console.log({ authDetails })
         const { access_token: accessToken, refresh_token: refreshToken } = authDetails
 
         this.cacheService.setItem('ACCESS_TOKEN', accessToken)
@@ -60,11 +66,10 @@ export class AuthService implements IAuthService {
   loginWithToken(accessToken: string) {
 
     return this.http
-      .post<any>('http://localhost:7000/oauth2/introspect', { accessToken })
+      .post<any>(`${environment.apiGatewayUrl}/oauth2/introspect`, { accessToken })
       .pipe(map(introspectResponse => {
 
         const { active } = introspectResponse
-        console.log({ active })
         if (!active) {
           this.logout()
 
@@ -79,7 +84,9 @@ export class AuthService implements IAuthService {
 
           this.$currentUsername.next(username || '')
 
-          this.subscribeToNotifications(username)
+          const decoded: any = jwtDecode(accessToken)
+
+          this.subscribeToNotifications(decoded['userId'])
 
           return true
         }
@@ -99,8 +106,13 @@ export class AuthService implements IAuthService {
 
 
 
-  refreshLogin(): AuthDetails {
-    throw new Error('Method not implemented.');
+  refreshLogin(): any {
+    const refreshToken = this.cacheService.getItem(REFRESH_TOKEN)
+    return this.http.post(`${environment.apiGatewayUrl}/oauth2/refresh`, { refreshToken }).pipe(map((authDetails: any) => {
+      const { access_token: accessToken, refresh_token: refreshToken } = authDetails
+      this.cacheService.setItem(ACCESS_TOKEN, accessToken)
+      this.cacheService.setItem(REFRESH_TOKEN, refreshToken)
+    }))
   }
 
   logout(): void {

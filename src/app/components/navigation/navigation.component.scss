@@ -16,8 +16,14 @@
 
 .navbar-dropdown-custom {
   background-color: #ddd;
+  max-height: 55vh;
+  overflow-y: scroll;
 }
 
 .is-read {
   background-color: #fff;
+}
+
+.is-alert {
+  color: hsl(348, 100%, 61%) !important;
 }

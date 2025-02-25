@@ -47,20 +47,17 @@ export class CreateAccountComponent implements OnInit {
     this.userService.
       getUser(username)
       .pipe(tap(user => {
-        console.log({ user })
         this.$currentUser.next(user)
         this.populateAccountForm(this.createAccountForm, user)
       }))
       .subscribe({
         error: (error) => {
-          console.log(error)
           this.$accountError.next("Something went wrong while fetching user details. ")
         }
       })
   }
 
   populateAccountForm = (form: FormGroup, fields: any) => {
-    console.log(Object.keys(fields), fields[0],)
 
     Object.keys(fields).forEach((field) => {
       form.get(field)?.setValue(fields[field])
@@ -87,7 +84,6 @@ export class CreateAccountComponent implements OnInit {
       })).subscribe({
         error: (err) => {
           this.$accountError.next('Error creating Account, Something went wrong!')
-          console.log(err)
         }
       })
     })).subscribe()

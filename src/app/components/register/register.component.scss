@@ -1,0 +1,21 @@
+form,
+.success {
+  min-height: 70vh;
+}
+
+.pwrd-error::after {
+  content: ", ";
+}
+
+.pwrd-error:last-child::after {
+  content: "";
+}
+
+.is-valid {
+  color: rgb(4, 167, 4);
+}
+
+.login {
+  width: 40%;
+  margin: auto;
+}

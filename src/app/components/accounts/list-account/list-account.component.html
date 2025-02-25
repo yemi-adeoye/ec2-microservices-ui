@@ -1,7 +1,19 @@
+<!-- no accounts to show and not fetching data -->
+
+@if(($accounts | async)?.length == 0 && !($isFetchingData | async)){
+<div class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block border-danger">
+  You currently have no accounts.<br />
+  <a routerLink="/accounts/new" class="mt-4 button has-background-danger"
+    >Create an account now</a
+  >
+</div>
+
+} @if (!($isFetchingData | async) && !($isAccountFetchError | async)) {
 <div class="px-6 accounts mt-6">
   <div
     class="column account"
     *ngFor="let account of $accounts | async"
+    [ngClass]="{ active: ($activeAccount | async) == account.accountNumber }"
     (click)="handleAccountclick(account.accountNumber)"
   >
     <span class="block center">
@@ -21,27 +33,53 @@
         >Account Number <br /><b>{{ account.accountNumber }}</b></span
       >
       <span class="account-number block center"
-        >Account Opened <br /><b>{{ "2024-01-17" | date }}</b></span
+        >Account Opened <br /><b>{{
+          (account.createdAt | date) || ""
+        }}</b></span
       >
     </div>
   </div>
 </div>
 
-<div class="transactions px-6 mt-6 font-roboto">
-  <span class="transaction-description px-2">
-    Transactions: [{{ $activeAccount | async }}]
-  </span>
-  <div class="heading px-2">
+} @else if ($isFetchingData | async){
+<div class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block fetching">
+  Fetching Accounts....<br /><br />
+  <app-spinner></app-spinner>
+</div>
+} @else if ($isAccountFetchError | async){
+<div class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block fetching">
+  Error Fetching Accounts
+</div>
+} @if(($accounts | async)?.length){
+<div class="transactions px-6 mt-6">
+  <span class="transaction-description px-2 font-roboto">
+    Recent Transactions
+    <span class="is-pulled-right"
+      >Account: {{ $activeAccount | async }}</span
+    ></span
+  >
+
+  <div class="heading px-2 has-text-centered is-clearfix font-roboto">
     <span class="from">FROM</span>
     <span class="amount">AMOUNT</span>
-    <span class="transacted-at">TRANSACTED TYPE</span>
+    <span class="transacted-at">TRANSACTION TYPE</span>
     <span class="status">TRANSACTION STATUS</span>
     <span class="to">TRANSACTED AT</span>
   </div>
-  <div class="px-2">
-    <div class="body" *ngFor="let transaction of $transactions | async">
+  <div class="px-0">
+    <div
+      class="body has-text-centered"
+      *ngFor="let transaction of $transactions | async"
+    >
       <span class="from">{{ transaction.initiatorAccount }}</span>
-      <span class="amount">{{ transaction.amount | currency : "$" }}</span>
+      <span
+        class="amount"
+        [ngClass]="{
+          'has-text-success': transaction.transactionType == 'DEPOSIT',
+          'has-text-danger': transaction.transactionType == 'WITHDRAWAL'
+        }"
+        >{{ transaction.amount | currency : "$" }}</span
+      >
       <span class="transaction-type">{{ transaction.transactionType }}</span>
       <span class="status">{{ transaction.transactionStatus }}</span>
       <span class="transacted-at">{{
@@ -49,4 +87,20 @@
       }}</span>
     </div>
   </div>
+  @if(($isFetchingTransaction | async)){
+  <div class="px-0 has-text-centered mt-4 mb-5 p-2">
+    Fetching Transactions...<br /><br />
+    <app-spinner></app-spinner>
+  </div>
+  } @if(($transactions | async)?.length == 0 && !($isFetchingTransaction |
+  async)){
+  <div class="px-0 has-text-centered mt-4 mb-5 p-2">
+    There are no transactions for this account yet.
+  </div>
+  } @if($isTransactionFetchError | async){
+  <div class="px-0 has-text-centered mt-4 has-background-danger p-2">
+    Something went wrong! Can't retrieve transactions. Please try again.
+  </div>
+  }
 </div>
+}

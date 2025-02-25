@@ -1,46 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { RouterLink, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { AsyncPipe } from '@angular/common';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [RouterModule, RouterLink, AsyncPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-
-  constructor(private http: HttpClient) {
-
-  }
-
-  ngAfterViewInit(): void {
-
-    // this.createChart()
-    // .then(data => console.log(data))
-    // .catch(err => console.error(err, "Something went wrong"))
-  }
-
-  @ViewChild("chartRef")
-  chartRef!: any
-
-  createChart = () => {
-    let chartContext = this.chartRef.nativeElement.getContext('2d')
-
-    new Chart(chartContext, {
-      type: 'line',
-      data: {
-        labels: ["Boys", "girls"],
-        datasets: [
-          {
-            label: "Aquisitions per year",
-            data: [120, 470]
-          }
-        ]
+  $isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  constructor(private authService: AuthService) {
+    this.authService.$isLoggedIn
+      .pipe(tap(isLoggedIn => {
+        this.$isLoggedIn.next(isLoggedIn)
       }
-    })
+      )).subscribe()
   }
-
 
 
 

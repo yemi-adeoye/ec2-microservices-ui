@@ -3,4 +3,5 @@ export interface NotificationDetails {
   id: string,
   isRead: boolean,
   message: string
+  createdAt: string
 }

@@ -1,0 +1,21 @@
+<div class="field">
+  <label class="label">{{ controlLabel }}</label>
+  <div class="control has-icons-right">
+    <input
+      class="input"
+      [class.is-success]="successCondition"
+      [type]="inputType"
+      [placeholder]="placeholder"
+      [formControl]="control"
+    />
+    <p class="help" [class.is-danger]="successCondition">
+      {{ validationText }}
+    </p>
+
+    <span class="icon is-small is-right">
+      @if(successCondition){
+      <i class="fas fa-exclamation-triangle is-danger"></i>
+      }@else{<i class="fas fa-check"></i> }
+    </span>
+  </div>
+</div>

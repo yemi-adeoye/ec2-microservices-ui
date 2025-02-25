@@ -1,0 +1,114 @@
+<div class="container">
+  <h1 class="mt-4 column is-12 has-text-centered font-roboto">
+    Transfer Funds
+  </h1>
+
+  <form action="" [formGroup]="transferForm">
+    <div
+      class="error has-background-danger px-6 py-2 mx-6 mb-4 mt-2 has-text-centered"
+      *ngIf="errorMessage.length"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <div
+      class="has-background-success-lighter px-6 py-2 mx-6 mb-4 mt-2 has-text-centered"
+      *ngIf="isSuccessful"
+    >
+      <p class="has-text-centered mb-6">
+        Transaction sent successfully!. As soon as the transaction is processed,
+        you will be notified.
+      </p>
+      <div class="has-text-centered">
+        <a routerLink="/accounts" class="button has-background-danger"
+          >View Accounts</a
+        >
+        <button
+          class="button has-background-black has-text-white ml-4"
+          (click)="createNewTransaction()"
+        >
+          Create Another Transaction
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="error px-6 py-2 mx-6 mb-4 mt-2 has-text-centered"
+      *ngIf="isProcessing"
+    >
+      Processing Transaction... <br /><br />
+      <app-spinner></app-spinner>
+    </div>
+
+    <ng-container *ngIf="!isSuccessful">
+      <div class="columns px-6 is-centered">
+        <div class="column">
+          <div class="field">
+            <label class="label">From Account </label>
+            <div class="select">
+              <select formControlName="fromAccount">
+                <option value="">Select Account</option>
+                <option
+                  *ngFor="let account of $accounts | async"
+                  [value]="account.accountNumber"
+                >
+                  Account: {{ account.accountNumber }} - Balance:
+                  {{ account.accountBalance }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">To Account </label>
+            <div class="select">
+              <select formControlName="toAccount">
+                <option value="">Select Account</option>
+                <option
+                  *ngFor="
+                    let account of $accounts
+                      | async
+                      | exclude : 'accountNumber' : fromAccountCtrl.value
+                  "
+                  [value]="account.accountNumber"
+                >
+                  Account: {{ account.accountNumber }} - Balance:
+                  {{ account.accountBalance }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="field">
+            <label class="label">Amount</label>
+            <div class="control">
+              <input
+                class="input"
+                step="0.01"
+                type="number"
+                placeholder="0.00"
+                formControlName="amount"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns is-mobile px-6 is-centered mt-0">
+        <div class="column is-half mt-0">
+          <button
+            style="width: 100%"
+            class="button has-background-danger"
+            (click)="transfer()"
+            [disabled]="!transferForm.valid || errorMessage.length"
+          >
+            Transfer
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</div>

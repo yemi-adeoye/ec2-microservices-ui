@@ -1,7 +1,16 @@
 .help {
-  margin-top: -35px;
+  margin-top: -30px;
+}
+
+form,
+.success {
+  min-height: 70vh;
 }
 
 .full-width {
   width: 100%;
+}
+
+input:read-only {
+  background-color: #eeeeee;
 }

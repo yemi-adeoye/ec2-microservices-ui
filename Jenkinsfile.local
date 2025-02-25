@@ -1,0 +1,44 @@
+/* groovylint-disable CompileStatic, NestedBlockDepth */
+pipeline {
+    agent any
+
+    stages {
+        stage('init') {
+      steps {
+        script {
+          gv = load 'scripts.local.groovy'
+        }
+      }
+        }
+
+        stage('Copying Files') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'LOCAL_EC2_PASSWORD', variable: 'LOCAL_EC2_PASSWORD')]) {
+            gv.copyFiles()
+          }
+        }
+      }
+        }
+
+        stage('Installing Packages') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'LOCAL_EC2_PASSWORD', variable: 'LOCAL_EC2_PASSWORD')]) {
+            gv.installPackages()
+          }
+        }
+      }
+        }
+
+        stage('Running Service') {
+      steps {
+        script {
+          withCredentials([string(credentialsId: 'LOCAL_EC2_PASSWORD', variable: 'LOCAL_EC2_PASSWORD')]) {
+            gv.runService()
+          }
+        }
+      }
+        }
+    }
+}

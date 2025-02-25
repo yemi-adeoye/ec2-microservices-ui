@@ -1,0 +1,245 @@
+@if(registrationSuccess$ | async){
+<div class="success">
+  <div class="has-background-success mx-6 mt-6 p-4 has-text-centered">
+    User Registration Successful! <br />
+    <a
+      (click)="login()"
+      class="mt-4 button has-background-danger is-block login"
+      >Login</a
+    >
+  </div>
+</div>
+
+} @else {
+<form action="" [formGroup]="registerForm" class="is-fullheight">
+  <h1 class="mt-4 column is-12 has-text-centered font-roboto">
+    Create Account
+  </h1>
+  @if(registrationError$ | async){
+  <p class="error mx-6 p-2 mb-4 has-background-danger has-text-centered">
+    Something went wrong while trying to register user. Please review form
+    frields and try again
+  </p>
+  } @if(registrationPending$ | async){
+  <p class="error mx-6 p-2 mb-4 has-background-warning has-text-centered">
+    Registering user....
+  </p>
+  }
+
+  <div class="columns px-6">
+    <div class="column">
+      <div class="field">
+        <label class="label">First Name</label>
+        <div class="control has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="!registerForm.controls['firstName'].errors"
+            type="text"
+            placeholder="first name"
+            formControlName="firstName"
+          />
+          @if(registerForm.controls['firstName'].errors &&
+          registerForm.controls['firstName'].touched){
+          <p class="help is-danger">
+            First Name is required and must be at least two characters long
+          </p>
+          }
+
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['firstName'].errors){
+            <i class="fas fa-check"></i> }
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Last Name</label>
+        <div class="control has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="!registerForm.controls['lastName'].errors"
+            type="text"
+            placeholder="last name"
+            formControlName="lastName"
+          />
+          @if(registerForm.controls['lastName'].errors &&
+          registerForm.controls['lastName'].touched){
+          <p class="help is-danger">
+            Last Name is required and must be at least two characters long
+          </p>
+          }
+
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['lastName'].errors){
+            <i class="fas fa-check"></i> }
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Date of Birth</label>
+        <div class="control has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="!registerForm.controls['dob'].errors"
+            type="date"
+            formControlName="dob"
+          />
+          @if(registerForm.controls['dob'].errors &&
+          registerForm.controls['dob'].touched){
+          <p class="help is-danger">Date of Birth is required</p>
+          }
+
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['dob'].errors){
+            <i class="fas fa-check"></i> }
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="
+              !registerForm.controls['username'].errors &&
+              !(isTakenUsername$ | async) &&
+              !(isUsernameValidationError$ | async)
+            "
+            type="text"
+            placeholder="username"
+            formControlName="username"
+          />
+          @if(registerForm.controls['username'].errors &&
+          registerForm.controls['username'].touched){
+          <p class="help is-danger">
+            Username is required and must be at least two characters long
+          </p>
+          } @else if (isUsernameValidationError$ | async){
+          <p class="help is-danger">
+            Error while trying to validate username. Please try again later
+          </p>
+          } @else if((isTakenUsername$ | async) &&
+          registerForm.controls['username'].touched){
+          <p class="help is-danger">
+            username: {{ registerForm.controls["username"].value }} is taken
+          </p>
+          }
+          <span class="icon is-small is-left">
+            <i class="fas fa-user"></i>
+          </span>
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['username'].errors && !(isTakenUsername$
+            | async) && !(isUsernameValidationError$ | async)){
+            <i class="fas fa-check"></i> }
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="!registerForm.controls['email'].errors"
+            type="email"
+            placeholder="user@email.com"
+            formControlName="email"
+          />
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['email'].errors){
+            <i class="fas fa-check"></i> }
+          </span>
+          @if(registerForm.controls['email'].errors &&
+          registerForm.controls['email'].touched){
+          <p class="help is-danger">A valid email is required</p>
+          }
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-right">
+          <input
+            class="input"
+            [class.is-success]="!registerForm.controls['password'].errors"
+            type="password"
+            placeholder="********"
+            formControlName="password"
+          />
+          <span class="icon is-small is-right">
+            @if(!registerForm.controls['password'].errors){
+            <i class="fas fa-check"></i>
+            }
+          </span>
+        </div>
+
+        <p
+          class="help"
+          [class.is-danger]="registerForm.controls['password'].errors"
+        >
+          Password Requirements: [<span
+            class="pwrd-error"
+            [class.is-valid]="
+              !registerForm.controls['password'].hasError('hasSpecialChars')
+            "
+            >A SYMBOL</span
+          >
+          <span
+            class="pwrd-error"
+            [class.is-valid]="
+              !registerForm.controls['password'].hasError('hasDigit')
+            "
+            >A DIGIT</span
+          ><span
+            class="pwrd-error"
+            [class.is-valid]="
+              !registerForm.controls['password'].hasError('hasUpperCase')
+            "
+            >UPPERCASE</span
+          >
+          <span
+            class="pwrd-error"
+            [class.is-valid]="
+              !registerForm.controls['password'].hasError('hasLowerCase')
+            "
+            >LOWERCASE</span
+          ><span
+            class="pwrd-error"
+            [class.is-valid]="
+              !registerForm.controls['password'].hasError('hasRequiredLength')
+            "
+            >MIN 6 CHARS</span
+          >]
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="columns is-mobile px-6 is-centered">
+    <div class="column is-half">
+      <button
+        class="button has-background-danger"
+        (click)="register()"
+        style="width: 100%"
+        [disabled]="
+          !registerForm.valid ||
+          (isTakenUsername$ | async) ||
+          (isTakenUsername$ | async)
+        "
+      >
+        Register
+      </button>
+    </div>
+  </div>
+  <div class="columns is-mobile px-6 is-centered mt-0">
+    <div class="field column is-half mt-0">
+      <p class="has-text-centered help">
+        By clicking the register button you agree to the terms and conditions.
+      </p>
+    </div>
+  </div>
+</form>
+}

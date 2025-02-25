@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { BehaviorSubject, map, Subscription } from 'rxjs';
 import { environment } from '../../../environment/environment';
@@ -8,10 +8,13 @@ import { AuthWorkerService } from '../../services/auth-worker.service';
 import { HttpClient } from '@angular/common/http';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationDetails } from '../../models/NotificationDetails';
+import { AccountService } from '../../services/account.service';
+import { ListAccountComponent } from '../accounts/list-account/list-account.component';
+import { ObjectCountPipe } from '../../pipes/app.object-count.pipe';
 
 @Component({
   selector: 'app-navigation',
-  imports: [RouterModule, RouterLink, AsyncPipe, NgIf, NgFor, NgClass],
+  imports: [RouterModule, RouterLink, AsyncPipe, NgIf, NgFor, NgClass, ObjectCountPipe],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
 })
@@ -23,11 +26,13 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   worker!: Worker;
 
+
   readonly $notifications: BehaviorSubject<any> = new BehaviorSubject([]);
 
   constructor(private authService: AuthService,
     private http: HttpClient,
     private notificationService: NotificationService,
+    private accountService: AccountService,
     private location: Location, private authWorkerSerice: AuthWorkerService) {
 
 
@@ -38,12 +43,23 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     this.isLoggedInSubscription = this.authService.$isLoggedIn
       .pipe(map(isLoggedIn => {
+
         this.$isLoggedIn.next(isLoggedIn)
 
         const message = isLoggedIn ? 'LOGGED_IN' : 'NOT_LOGGED_IN';
 
-        this.worker.onmessage = (data) => {
-          // console.log('Incoming message from worker,...', data)
+        this.worker.onmessage = (message) => {
+          switch (message.data) {
+            case 'REFRESH':
+              this.authService.refreshLogin().subscribe({
+                error: (error: any) => {
+                  this.worker.terminate()
+                  console.error(error)
+                  this.logout()
+                }
+              })
+              break;
+          }
         }
 
         if (isLoggedIn) {
@@ -56,7 +72,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
               notification.parsedMessage = JSON.parse(notification.message).notification
             })
 
-            this.$notifications.next(notifications)
+            this.$notifications.next(notifications.sort((a: NotificationDetails, b: NotificationDetails) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf()))
           })).subscribe()
         }
 
@@ -69,9 +85,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   login = () => {
-    const { authEndpoint, clientId, redirectUri, responseType, scope } = environment.authServer
-
-    window.location.replace(`${authEndpoint}?redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&client_id=${clientId}`)
+    this.authService.initiateLogin()
   }
 
   logout = () => {
@@ -84,7 +98,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   handleNotificationRead(notificationId: any) {
-    console.log({ notificationId })
-    // this.notificationService.handleNotificationRead();
+    this.notificationService.handleNotificationsRead(notificationId);
   }
 }
