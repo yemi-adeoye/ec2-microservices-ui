@@ -1,7 +1,9 @@
 <!-- no accounts to show and not fetching data -->
 
 @if(($accounts | async)?.length == 0 && !($isFetchingData | async)){
-<div class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block border-danger">
+<div
+  class="font-roboto has-text-centered mt-6 mx-6 p-4 is-block border-danger fetching"
+>
   You currently have no accounts.<br />
   <a routerLink="/accounts/new" class="mt-4 button has-background-danger"
     >Create an account now</a

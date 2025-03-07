@@ -1,7 +1,3 @@
-<div class="is-danger">
-  {{ $accountError | async }}
-</div>
-
 @if($accountCreated| async){
 <div class="has-background-success-lighter mx-6 mt-4 p-4 success">
   <p class="has-text-centered mb-4">Account has been created successfully.</p>
@@ -130,4 +126,8 @@
     </div>
   </div>
 </form>
+} @if($accountError | async){
+<div class="is-danger has-text-danger has-text-centered mt-4 success">
+  {{ $accountError | async }}
+</div>
 }

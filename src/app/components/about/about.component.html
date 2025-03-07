@@ -1,0 +1,53 @@
+<h1 class="mt-4 column is-12 has-text-centered font-roboto is-size-3 mb-4">
+  Application Architecture
+</h1>
+
+<article class="columns px-6">
+  <section class="column">
+    <h2 class="font-roboto mb-2">Objective</h2>
+    <p class="article-section is-size-5 mb-5">
+      The aim of this demo application is to mimic a microservice application
+      economically and without actually using the infrastructure required to
+      deploy a microservice application. <em>Mimic</em>, because microservices
+      are often built to solve certain challenges such as scalability. This
+      project doesn't obviously have a need to scale and using the
+      infrastructure that aids the scaling of microservices for this application
+      would be expensive and an overkill.
+    </p>
+    <h2 class="font-roboto mb-2">Overcoming the Challenge</h2>
+    <p class="article-section is-size-5 mb-5">
+      So how could one deploy such an application without incuring any the
+      associated costs? For a real world application, a message broker like
+      Kafka or RabbitMQ would be used for non synchronous communication between
+      the application. We would require at least one load balancer to route
+      traffic to healthy instances of our services. We would probably deploy our
+      services on EC2, ECS or EKS and have the application scale based on
+      traffic to each service, and ensure to have multiple instances of the API
+      Gateway to prevent having a single point of failure. We would perhaps use
+      RDS to deploy our databases, etc, etc. However we do not have that luxury!
+    </p>
+    <p class="article-section is-size-5 mb-5">
+      However since Amazon offers a free tier which allows some services to be
+      used for some hours. This application was architected as follows:
+    </p>
+    <ul class="list">
+      <li class="article-section list-item is-size-5 mb-5">
+        Amazon S3 was used to host the front end application. After the
+        <em>convinient <i>ng build</i></em> command is used the content of the
+        dist folder is copied to the S3 bucket
+      </li>
+      <li class="article-section list-item is-size-5 mb-5">
+        All other services were deployed on a <em>t2-micro</em> EC2 instance.
+        The file based sqlite database was used where persistence is required. A
+        secuity group is assigned to the EC2 instance to expose only the ports
+        the API Gateway and the users microservices are running on.
+      </li>
+    </ul>
+  </section>
+  <div class="column mx-6">
+    <img src="arch-img.png" alt="architectural design image" />
+    <p class="block has-text-centered fs-6 mt-3 is-small">
+      Fig. 1: Image showing the applications architecture
+    </p>
+  </div>
+</article>

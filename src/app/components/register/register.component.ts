@@ -6,10 +6,11 @@ import { environment } from '../../../environment/environment';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { CustomValidators } from '../../validators/CustomValidators';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, AsyncPipe],
+  imports: [ReactiveFormsModule, AsyncPipe, SpinnerComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })

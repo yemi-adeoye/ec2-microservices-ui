@@ -28,7 +28,7 @@
         class="navbar-item has-dropdown has-text-danger is-hoverable font-roboto"
         *ngIf="$isLoggedIn | async"
       >
-        <a routerLink="/accounts" class="navbar-link">Accounts</a>
+        <a routerLink="/accounts" class="navbar-link is-alert">Accounts</a>
         <div class="navbar-dropdown">
           <a routerLink="/accounts/new" class="navbar-item">Create Account</a>
           <a routerLink="/accounts/" class="navbar-item">View Account</a>
@@ -48,7 +48,12 @@
         Activity Logs
       </a>
 
-      <a class="navbar-item navbar-item has-text-danger font-roboto"> Help </a>
+      <a
+        class="navbar-item navbar-item has-text-danger font-roboto"
+        routerLink="/about"
+      >
+        About
+      </a>
       <div
         class="navbar-item has-dropdown is-hoverable font-roboto"
         *ngIf="$isLoggedIn | async"

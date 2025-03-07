@@ -8,10 +8,12 @@ import { LogsComponent } from './components/logs/logs.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { authGuard } from './guards/auth.guard';
+import { AboutComponent } from './components/about/about.component';
 
 export const routes: Routes = [
 
   { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'about', component: AboutComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'logs', component: LogsComponent, canActivate: [authGuard], pathMatch: 'full' },

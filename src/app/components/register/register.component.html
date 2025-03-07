@@ -1,7 +1,8 @@
 @if(registrationSuccess$ | async){
 <div class="success">
-  <div class="has-background-success mx-6 mt-6 p-4 has-text-centered">
-    User Registration Successful! <br />
+  <div class="has-background-success-apir mx-6 mt-6 p-4 has-text-centered">
+    User Registration Successful! <br /><br />
+
     <a
       (click)="login()"
       class="mt-4 button has-background-danger is-block login"
@@ -21,8 +22,10 @@
     frields and try again
   </p>
   } @if(registrationPending$ | async){
-  <p class="error mx-6 p-2 mb-4 has-background-warning has-text-centered">
-    Registering user....
+  <p class="error mx-6 p-2 mb-4 has-text-centered">
+    Registering user....<br />
+    <br />
+    <app-spinner></app-spinner>
   </p>
   }
 

@@ -8,10 +8,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ArrayFilter } from '../../../pipes/app.array-filter.pipe';
 import { TransactionService } from '../../../services/transaction.service';
 import { SpinnerComponent } from "../../spinner/spinner.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-transfer',
-  imports: [NgFor, NgIf, AsyncPipe, ArrayFilter, ReactiveFormsModule, SpinnerComponent],
+  imports: [NgFor, NgIf, AsyncPipe, ArrayFilter, ReactiveFormsModule, SpinnerComponent, RouterLink],
   templateUrl: './transfer.component.html',
   styleUrl: './transfer.component.scss'
 })
